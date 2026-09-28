@@ -128,7 +128,6 @@
             cursor: crosshair;
         }
 
-        /* Input styling for capturing crisp text */
         input[type="text"], input[type="date"] {
             font-weight: 600;
             color: #111111;
@@ -199,67 +198,92 @@
         </header>
 
         <h2 class="text-center text-base md:text-lg font-bold text-gray-900 mb-4 uppercase tracking-wide border-b-2 border-yellow-500 pb-2">
-            AUTORIZAÇÃO DE USO DE IMAGEM, VOZ E DADOS DE CRIANÇA E ADOLESCENTE
+            AUTORIZAÇÃO DE USO DE IMAGEM, VOZ E DADOS PESSOAIS
         </h2>
 
         <form id="authForm" onsubmit="event.preventDefault(); submitForm();">
-            <!-- DADOS DO MENOR -->
-            <div class="section-title">DADOS DO(A) MENOR</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do(a) Menor *</label>
-                    <input type="text" id="nomeMenor" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase">Data de Nascimento *</label>
-                    <input type="text" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">                  </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do(a) Menor</label>
-                    <input type="text" id="rgMenor" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
-                </div>
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do(a) Menor</label>
-                    <input type="text" id="cpfMenor" placeholder="000.000.000-00" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+
+            <!-- SELEÇÃO DE ESCOPO DA AUTORIZAÇÃO -->
+            <div class="section-title">FINALIDADE E ESCOPO DA AUTORIZAÇÃO</div>
+            <div class="bg-yellow-50 p-4 rounded border border-yellow-300 mb-4">
+                <label class="block text-xs font-bold text-gray-800 uppercase mb-2">Esta autorização se refere a: *</label>
+                <div class="space-y-2 text-xs font-semibold text-gray-800">
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="escopoAutorizacao" value="menor" checked onclick="atualizarEscopo()" class="text-yellow-600 focus:ring-yellow-500">
+                        <span>( ) Um menor sob minha tutela</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="escopoAutorizacao" value="proprio" onclick="atualizarEscopo()" class="text-yellow-600 focus:ring-yellow-500">
+                        <span>( ) À minha pessoa (Maior de Idade / Adulto)</span>
+                    </label>
+                    <label class="flex items-center space-x-2 cursor-pointer">
+                        <input type="radio" name="escopoAutorizacao" value="ambos" onclick="atualizarEscopo()" class="text-yellow-600 focus:ring-yellow-500">
+                        <span>( ) Um menor sob minha tutela e à minha pessoa</span>
+                    </label>
                 </div>
             </div>
 
-            <!-- DADOS DO RESPONSÁVEL LEGAL -->
-            <div class="section-title">DADOS DO RESPONSÁVEL LEGAL</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do Responsável Legal *</label>
-                    <input type="text" id="nomeResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+            <!-- DADOS DO MENOR -->
+            <div id="secMenor">
+                <div class="section-title">DADOS DO(A) MENOR</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Nome do(a) Menor *</label>
+                        <input type="text" id="nomeMenor" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase">Data de Nascimento *</label>
+                        <input type="text" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase">RG do(a) Menor</label>
+                        <input type="text" id="rgMenor" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase">CPF do(a) Menor</label>
+                        <input type="text" id="cpfMenor" placeholder="000.000.000-00" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
                 </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do Responsável *</label>
-                    <input type="text" id="rgResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
-                </div>
-                <div>
-                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do Responsável *</label>
-                    <input type="text" id="cpfResponsavel" placeholder="000.000.000-00" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+            </div>
+
+            <!-- DADOS DO RESPONSÁVEL LEGAL / ADULTO TITULAR -->
+            <div id="secResponsavel">
+                <div class="section-title" id="tituloResponsavel">DADOS DO RESPONSÁVEL LEGAL</div>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
+                    <div class="md:col-span-2">
+                        <label class="block text-xs font-bold text-gray-700 uppercase" id="lblNomeResp">Nome do Responsável Legal *</label>
+                        <input type="text" id="nomeResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase" id="lblRgResp">RG do Responsável *</label>
+                        <input type="text" id="rgResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase" id="lblCpfResp">CPF do Responsável *</label>
+                        <input type="text" id="cpfResponsavel" placeholder="000.000.000-00" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                    </div>
                 </div>
             </div>
 
             <!-- DADOS DA UNIDADE ESCOTEIRA LOCAL -->
             <div class="section-title">DADOS DA UNIDADE ESCOTEIRA LOCAL (UEL)</div>
-            <div class="bg-gray-50 p-3.5 rounded border border-gray-300 text-xs text-gray-800 leading-relaxed">
-                Pelo presente instrumento, o(a) RESPONSÁVEL LEGAL acima identificado(a), na qualidade de representante legal do(a) menor:<br><br>
-                AUTORIZA o Grupo Escoteiro <strong>MEMORIAL 350 SP.</strong>, pessoa jurídica de direito privado, inscrita no CNPJ nº <strong>46.612.339/0001-40</strong>, com sede na <strong>Rua</strong> Av. Doutor Altair Martins, 520 <strong>Bairro</strong>, Raposo Tavares, <strong>Cidade:</strong> Osasco SP, <strong>CEP.:</strong> 06149-020 a captar, utilizar e divulgar a imagem, voz e demais dados pessoais do(a) menor, nos termos e condições abaixo:
+            <div class="bg-gray-50 p-3.5 rounded border border-gray-300 text-xs text-gray-800 leading-relaxed" id="textoUelContextual">
+                <!-- Texto renderizado via JavaScript -->
             </div>
 
             <!-- CLÁUSULAS (TOTALMENTE ESTÁTICAS E SEM SCROLLBAR) -->
             <div class="section-title">CLÁUSULAS E CONDIÇÕES</div>
             <div class="bg-gray-50 p-4 rounded border border-gray-300 mb-4">
-                <div class="clause-item"><strong>CLÁUSULA 1 - FINALIDADE:</strong> A presente autorização tem por finalidade o uso da imagem e voz do(a) menor em materiais institucionais, educativos, informativos e de divulgação do Movimento Escoteiro, incluindo campanhas, relatórios, redes sociais, sites institucionais e acervo histórico.</div>
+                <div class="clause-item"><strong>CLÁUSULA 1 - FINALIDADE:</strong> A presente autorização tem por finalidade o uso da imagem e voz em materiais institucionais, educativos, informativos e de divulgação do Movimento Escoteiro, incluindo campanhas, relatórios, redes sociais, sites institucionais e acervo histórico.</div>
                 <div class="clause-item"><strong>CLÁUSULA 2 - ABRANGÊNCIA:</strong> A autorização é concedida em caráter gratuito, por prazo indeterminado e em todo o território nacional e internacional, abrangendo todos os meios de comunicação existentes ou que venham a ser desenvolvidos.</div>
-                <div class="clause-item"><strong>CLÁUSULA 3 - PROTEÇÃO DA CRIANÇA E DO ADOLESCENTE:</strong> O Grupo Escoteiro compromete-se a utilizar a imagem e voz do(a) menor em estrita observância ao princípio da proteção integral, assegurando a preservação de sua dignidade, privacidade, honra e integridade física, psíquica e moral. Fica vedada qualquer utilização que exponha o(a) menor a situação vexatória, constrangedora, inadequada ou que implique exploração de sua imagem. O Grupo Escoteiro adotará medidas razoáveis para evitar exposição excessiva, especialmente em ambientes digitais de amplo alcance.</div>
-                <div class="clause-item"><strong>CLÁUSULA 4 - LIMITAÇÃO DE USO:</strong> A imagem e voz do(a) menor não serão utilizadas para fins comerciais diretos ou exploração econômica autônoma, salvo mediante autorização específica do responsável legal e, quando exigido pela legislação, autorização judicial.</div>
-                <div class="clause-item"><strong>CLÁUSULA 5 - TRATAMENTO DE DADOS PESSOAIS (LGPD):</strong> O tratamento dos dados pessoais do(a) menor será realizado com base no consentimento do responsável legal, nos termos da Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades descritas neste instrumento.</div>
-                <div class="clause-item"><strong>CLÁUSULA 6 - REVOGAÇÃO:</strong> A presente autorização poderá ser revogada a qualquer tempo pelo responsável legal, mediante solicitação formal, produzindo efeitos apenas para usos futuros, sem prejuízo das utilizações já realizadas.</div>
-                <div class="clause-item"><strong>CLÁUSULA 7 - CAPTAÇÃO EM EVENTOS:</strong> O responsável declara estar ciente de que a captação de imagens poderá ocorrer em ambientes coletivos, como atividades escoteiras, eventos nacionais, regionais ou locais, não sendo possível o controle individual absoluto de enquadramento.</div>
+                <div class="clause-item"><strong>CLÁUSULA 3 - PROTEÇÃO E DIGNIDADE:</strong> O Grupo Escoteiro compromete-se a utilizar a imagem e voz em estrita observância aos princípios da proteção integral e dignidade da pessoa humana, assegurando a preservação de sua honra e integridade física, psíquica e moral. Fica vedada qualquer utilização que exponha os titulares a situação vexatória ou inadequada.</div>
+                <div class="clause-item"><strong>CLÁUSULA 4 - LIMITAÇÃO DE USO:</strong> A imagem e voz não serão utilizadas para fins comerciais diretos ou exploração econômica autônoma, salvo mediante autorização prévia específica e expressa.</div>
+                <div class="clause-item"><strong>CLÁUSULA 5 - TRATAMENTO DE DADOS PESSOAIS (LGPD):</strong> O tratamento dos dados pessoais será realizado com base no consentimento do titular ou de seu responsável legal, nos termos da Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades descritas neste instrumento.</div>
+                <div class="clause-item"><strong>CLÁUSULA 6 - REVOGAÇÃO:</strong> A presente autorização poderá ser revogada a qualquer tempo mediante solicitação formal, produzindo efeitos apenas para usos futuros, sem prejuízo das utilizações já realizadas.</div>
+                <div class="clause-item"><strong>CLÁUSULA 7 - CAPTAÇÃO EM EVENTOS:</strong> O declarante manifesta ciência de que a captação de imagens poderá ocorrer em ambientes coletivos, como atividades escoteiras, eventos nacionais, regionais ou locais, não sendo possível o controle individual absoluto de enquadramento.</div>
                 <div class="clause-item"><strong>CLÁUSULA 8 - COMPARTILHAMENTO INSTITUCIONAL:</strong> A UEL poderá compartilhar as imagens com suas unidades regionais, grupos escoteiros e parceiros institucionais, exclusivamente para fins compatíveis com o Movimento Escoteiro, vedado o uso comercial por terceiros.</div>
                 <div class="clause-item"><strong>CLÁUSULA 9 - GRATUIDADE:</strong> A presente autorização é concedida de forma gratuita, não sendo devida qualquer remuneração presente ou futura.</div>
-                <div class="clause-item"><strong>CLÁUSULA 10 - DECLARAÇÃO:</strong> O responsável legal declara que leu, compreendeu e concorda integralmente com os termos deste instrumento.</div>
+                <div class="clause-item"><strong>CLÁUSULA 10 - DECLARAÇÃO:</strong> O assinante declara que leu, compreendeu e concorda integralmente com os termos deste instrumento.</div>
             </div>
 
             <!-- LOCAL E DATA -->
@@ -275,7 +299,7 @@
             </div>
 
             <!-- ÁREA DE ASSINATURA -->
-            <div class="section-title">ASSINATURA DIGITAL DO RESPONSÁVEL</div>
+            <div class="section-title">ASSINATURA DIGITAL</div>
             <p class="text-xs text-gray-600 mb-2">Assine no quadro abaixo usando o dedo no celular ou o mouse no computador:</p>
             
             <div class="signature-container mb-2">
@@ -323,13 +347,68 @@
     </footer>
 
     <script>
-        // URL DO GOOGLE APPS SCRIPT
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsrrtsBFklPDe-rdDRlOfAgd0STZ-nAVyUqF-yPzr4AJOv0g78KFd274F8-Z3YPzRD2Q/exec";
 
-        // Preenche data atual automaticamente
+        // Data atual formatada
         const hoje = new Date();
         const dataFormatada = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
         document.getElementById('dataAtual').value = dataFormatada;
+
+        // Alternância dinâmica baseada no escopo
+        function atualizarEscopo() {
+            const escopo = document.querySelector('input[name="escopoAutorizacao"]:checked').value;
+            const secMenor = document.getElementById('secMenor');
+            const nomeMenor = document.getElementById('nomeMenor');
+            const dataNascimento = document.getElementById('dataNascimento');
+            const textoUelContextual = document.getElementById('textoUelContextual');
+
+            const tituloResp = document.getElementById('tituloResponsavel');
+            const lblNomeResp = document.getElementById('lblNomeResp');
+            const lblRgResp = document.getElementById('lblRgResp');
+            const lblCpfResp = document.getElementById('lblCpfResp');
+
+            const uelInfoBase = `<strong>MEMORIAL 350 SP.</strong>, pessoa jurídica de direito privado, inscrita no CNPJ nº <strong>46.612.339/0001-40</strong>, com sede na <strong>Rua</strong> Av. Doutor Altair Martins, 520 <strong>Bairro</strong>, Raposo Tavares, <strong>Cidade:</strong> Osasco SP, <strong>CEP.:</strong> 06149-020`;
+
+            if (escopo === 'menor') {
+                secMenor.style.display = 'block';
+                nomeMenor.required = true;
+                dataNascimento.required = true;
+
+                tituloResp.innerText = "DADOS DO RESPONSÁVEL LEGAL";
+                lblNomeResp.innerText = "Nome do Responsável Legal *";
+                lblRgResp.innerText = "RG do Responsável *";
+                lblCpfResp.innerText = "CPF do Responsável *";
+
+                textoUelContextual.innerHTML = `Pelo presente instrumento, o(a) RESPONSÁVEL LEGAL acima identificado(a), na qualidade de representante legal do(a) menor:<br><br>AUTORIZA o Grupo Escoteiro ${uelInfoBase} a captar, utilizar e divulgar a imagem, voz e demais dados pessoais do(a) menor, nos termos e condições abaixo:`;
+
+            } else if (escopo === 'proprio') {
+                secMenor.style.display = 'none';
+                nomeMenor.required = false;
+                dataNascimento.required = false;
+
+                tituloResp.innerText = "DADOS DO TITULAR / ADULTO";
+                lblNomeResp.innerText = "Nome Completo *";
+                lblRgResp.innerText = "RG *";
+                lblCpfResp.innerText = "CPF *";
+
+                textoUelContextual.innerHTML = `Pelo presente instrumento, eu AUTORIZO o Grupo Escoteiro ${uelInfoBase} a captar, utilizar e divulgar minha imagem, minha voz e demais dados pessoais a meu respeito, nos termos e condições abaixo:`;
+
+            } else if (escopo === 'ambos') {
+                secMenor.style.display = 'block';
+                nomeMenor.required = true;
+                dataNascimento.required = true;
+
+                tituloResp.innerText = "DADOS DO RESPONSÁVEL LEGAL / TITULAR";
+                lblNomeResp.innerText = "Nome do Responsável Legal *";
+                lblRgResp.innerText = "RG do Responsável *";
+                lblCpfResp.innerText = "CPF do Responsável *";
+
+                textoUelContextual.innerHTML = `Pelo presente instrumento, eu AUTORIZO o Grupo Escoteiro ${uelInfoBase} a captar, utilizar e divulgar a imagem, voz e demais dados pessoais do(a) menor. Da mesma forma, AUTORIZO a captar, utilizar e divulgar minha imagem, minha voz e demais dados pessoais a meu respeito, nos termos e condições abaixo:`;
+            }
+        }
+
+        // Executa atualização do texto no carregamento inicial
+        atualizarEscopo();
 
         // Configuração do Canvas de Assinatura
         const canvas = document.getElementById('signature-pad');
@@ -338,18 +417,18 @@
             penColor: 'rgb(0, 0, 128)'
         });
 
-        // Máscara para forçar o formato DD/MM/AAAA enquanto digita
-const inputDataNascimento = document.getElementById('dataNascimento');
-inputDataNascimento.addEventListener('input', (e) => {
-    let v = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
-    if (v.length > 8) v = v.slice(0, 8);
-    if (v.length > 4) {
-        v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
-    } else if (v.length > 2) {
-        v = v.replace(/^(\d{2})(\d{0,2})/, '$1/$2');
-    }
-    e.target.value = v;
-});
+        // Máscara para formato DD/MM/AAAA na Data de Nascimento
+        const inputDataNascimento = document.getElementById('dataNascimento');
+        inputDataNascimento.addEventListener('input', (e) => {
+            let v = e.target.value.replace(/\D/g, '');
+            if (v.length > 8) v = v.slice(0, 8);
+            if (v.length > 4) {
+                v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
+            } else if (v.length > 2) {
+                v = v.replace(/^(\d{2})(\d{0,2})/, '$1/$2');
+            }
+            e.target.value = v;
+        });
 
         function resizeCanvas() {
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
@@ -366,15 +445,16 @@ inputDataNascimento.addEventListener('input', (e) => {
             signaturePad.clear();
         });
 
-        // Converte temporariamente campos de entrada em elementos visíveis para impressão legível
         function prepareInputsForCapture() {
             const inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
             inputs.forEach(input => {
-                const textSpan = document.createElement('span');
-                textSpan.className = 'temp-print-value font-bold text-black text-sm block border-b border-gray-400 py-1';
-                textSpan.innerText = input.value || '-';
-                input.style.display = 'none';
-                input.parentNode.insertBefore(textSpan, input.nextSibling);
+                if (input.offsetWidth > 0 || input.offsetHeight > 0) {
+                    const textSpan = document.createElement('span');
+                    textSpan.className = 'temp-print-value font-bold text-black text-sm block border-b border-gray-400 py-1';
+                    textSpan.innerText = input.value || '-';
+                    input.style.display = 'none';
+                    input.parentNode.insertBefore(textSpan, input.nextSibling);
+                }
             });
         }
 
@@ -387,7 +467,6 @@ inputDataNascimento.addEventListener('input', (e) => {
             });
         }
 
-        // Função principal de envio
         async function submitForm() {
             if (signaturePad.isEmpty()) {
                 alert("Por favor, faça sua assinatura digital no quadro antes de enviar.");
@@ -400,14 +479,12 @@ inputDataNascimento.addEventListener('input', (e) => {
             btnSubmit.disabled = true;
             btnSubmit.innerHTML = "⌛ GERANDO TERMO E ENVIANDO...";
             statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-blue-100 text-blue-800";
-            statusMessage.innerText = "Processando formulário com alta qualidade... Aguarde um instante.";
+            statusMessage.innerText = "Processando formulário... Aguarde um instante.";
             statusMessage.classList.remove('hidden');
 
             try {
-                // Prepara inputs para autossuficiência de renderização limpa
                 prepareInputsForCapture();
 
-                // Captura do formulário completo em Imagem/PDF
                 const element = document.getElementById('pdf-content');
                 const canvasPdf = await html2canvas(element, { 
                     scale: 2, 
@@ -420,18 +497,19 @@ inputDataNascimento.addEventListener('input', (e) => {
                 restoreInputsAfterCapture();
 
                 const imgData = canvasPdf.toDataURL('image/png');
-                const nomeMenor = document.getElementById('nomeMenor').value.trim();
-                const fileName = `Termo_UEL_${nomeMenor.replace(/\s+/g, '_')}_${Date.now()}.png`;
+                const escopo = document.querySelector('input[name="escopoAutorizacao"]:checked').value;
+                const nomeMenor = escopo !== 'proprio' ? document.getElementById('nomeMenor').value.trim() : 'MAIOR_DE_IDADE';
+                const nomeResponsavel = document.getElementById('nomeResponsavel').value.trim();
+                
+                const fileName = `Termo_UEL_${(nomeMenor !== 'MAIOR_DE_IDADE' ? nomeMenor : nomeResponsavel).replace(/\s+/g, '_')}_${Date.now()}.png`;
 
-                // Preparação dos dados para o Google Apps Script
                 const payload = {
                     fileName: fileName,
                     fileData: imgData,
                     nomeMenor: nomeMenor,
-                    nomeResponsavel: document.getElementById('nomeResponsavel').value.trim()
+                    nomeResponsavel: nomeResponsavel
                 };
 
-                // Envio via POST para o Google Apps Script
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
