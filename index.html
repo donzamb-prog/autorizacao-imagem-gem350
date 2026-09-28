@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Autorização de Uso de Imagem, Voz e Dados - UEL</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Signature Pad -->
+    <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+    <!-- jsPDF e html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+    <style>
+        :root {
+            --primary-color: #111111;
+            --secondary-color: #f1b80d;
+        }
+
+        body {
+            background-color: #f3f4f6;
+            color: #1f2937;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px 10px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: #ffffff;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+
+        /* CABEÇALHO ESTILO */
+        .header {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            border-bottom: 3px solid var(--secondary-color);
+            padding-bottom: 15px;
+            margin-bottom: 25px;
+            gap: 15px;
+        }
+
+        .header-logo-left,
+        .header-logo-right {
+            flex: 0 0 100px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .logo-img {
+            max-height: 90px;
+            max-width: 100px;
+            object-fit: contain;
+        }
+
+        .header-title {
+            text-align: center;
+            flex: 1;
+        }
+
+        .header-title h2 {
+            font-size: 0.95rem;
+            color: #555;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+
+        .header-title h1 {
+            font-size: 1.35rem;
+            color: var(--primary-color);
+            font-weight: 700;
+            margin: 3px 0;
+        }
+
+        .header-title p {
+            font-size: 0.82rem;
+            color: #444;
+            line-height: 1.3;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 10px 5px; }
+            .container { padding: 15px; }
+            .header { flex-direction: column; text-align: center; gap: 8px; padding-bottom: 10px; margin-bottom: 15px; }
+            .header-logo-left, .header-logo-right { flex: none; }
+            .logo-img { max-height: 55px; max-width: 75px; }
+            .header-title h2 { font-size: 0.75rem; }
+            .header-title h1 { font-size: 1.05rem; }
+            .header-title p { font-size: 0.72rem; }
+        }
+
+        .section-title {
+            background-color: var(--primary-color);
+            color: #ffffff;
+            padding: 8px 12px;
+            font-weight: bold;
+            font-size: 0.95rem;
+            margin-top: 20px;
+            margin-bottom: 15px;
+            border-left: 5px solid var(--secondary-color);
+            border-radius: 2px;
+        }
+
+        .clause-item {
+            margin-bottom: 10px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+            color: #333;
+            text-align: justify;
+        }
+
+        .signature-container {
+            border: 2px dashed #cbd5e1;
+            border-radius: 8px;
+            background-color: #fafafa;
+            position: relative;
+        }
+
+        canvas {
+            width: 100%;
+            height: 160px;
+            touch-action: none;
+            cursor: crosshair;
+        }
+
+        footer {
+            background-color: var(--primary-color);
+            color: #dddddd;
+            padding: 25px 20px;
+            border-top: 4px solid var(--secondary-color);
+            font-size: 0.9rem;
+            text-align: center;
+            width: 100%;
+            margin-top: 30px;
+            border-radius: 0 0 8px 8px;
+        }
+
+        .footer-container {
+            max-width: 700px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .footer-logo {
+            width: 60px;
+            height: 60px;
+            object-fit: contain;
+            border-radius: 50%;
+        }
+
+        .footer-info p {
+            margin-bottom: 5px;
+            line-height: 1.4;
+        }
+
+        .footer-links a {
+            color: var(--secondary-color);
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .footer-links a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container" id="pdf-content">
+        <!-- CABEÇALHO -->
+        <header class="header">
+            <div class="header-logo-left">
+                <img src="logo_gem.png" alt="Logo GEM" class="logo-img" onerror="this.src='https://i.ibb.co/CKWP9CmS/logo-GE-M-2025.jpg'">
+            </div>
+            <div class="header-title">
+                <h2>UNIÃO DOS ESCOTEIROS DO BRASIL</h2>
+                <h1>Grupo Escoteiro Memorial 350 SP</h1>
+                <p>Av. Doutor Altair Martins, 520 - Raposo Tavares, Osasco SP</p>
+                <p>CEP: 06149-020 • E-mail: grupoescoteiromemorial.350@gmail.com</p>
+                <p>Tel: (11) 2884-5555 • Whats: (11) 99745-7599 / (11) 94077-4175</p>
+            </div>
+            <div class="header-logo-right">
+                <img src="logo_ueb.png" alt="Logo Escoteiros do Brasil" class="logo-img" onerror="this.style.display='none'">
+            </div>
+        </header>
+
+        <h2 class="text-center text-lg font-bold text-gray-800 mb-4 uppercase tracking-wide border-b-2 border-yellow-500 pb-2">
+            AUTORIZAÇÃO DE USO DE IMAGEM, VOZ E DADOS DE CRIANÇA E ADOLESCENTE
+        </h2>
+
+        <form id="authForm" onsubmit="event.preventDefault(); submitForm();">
+            <!-- DADOS DO MENOR -->
+            <div class="section-title">DADOS DO(A) MENOR</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do(a) Menor *</label>
+                    <input type="text" id="nomeMenor" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Data de Nascimento *</label>
+                    <input type="date" id="dataNascimento" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do(a) Menor</label>
+                    <input type="text" id="rgMenor" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do(a) Menor</label>
+                    <input type="text" id="cpfMenor" placeholder="000.000.000-00" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+            </div>
+
+            <!-- DADOS DO RESPONSÁVEL LEGAL -->
+            <div class="section-title">DADOS DO RESPONSÁVEL LEGAL</div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do Responsável Legal *</label>
+                    <input type="text" id="nomeResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do Responsável *</label>
+                    <input type="text" id="rgResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do Responsável *</label>
+                    <input type="text" id="cpfResponsavel" placeholder="000.000.000-00" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
+                </div>
+            </div>
+
+            <!-- DADOS DA UNIDADE ESCOTEIRA LOCAL -->
+            <div class="section-title">DADOS DA UNIDADE ESCOTEIRA LOCAL (UEL)</div>
+            <p class="text-xs text-gray-600 mb-3">
+                Pelo presente instrumento, o(a) RESPONSÁVEL LEGAL acima identificado(a), na qualidade de representante legal do(a) menor, AUTORIZA a Unidade Escoteira Local abaixo especificada:
+            </p>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 bg-gray-50 p-3 rounded border border-gray-200">
+                <div class="md:col-span-2">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do Grupo Escoteiro / UEL</label>
+                    <input type="text" value="Grupo Escoteiro Memorial 350 SP" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm text-gray-700 font-semibold">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CNPJ nº</label>
+                    <input type="text" value="00.000.000/0000-00" id="cnpjUel" class="w-full mt-1 p-2 border border-gray-300 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Endereço</label>
+                    <input type="text" value="Av. Doutor Altair Martins, 520" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Bairro / Cidade / UF</label>
+                    <input type="text" value="Raposo Tavares, Osasco - SP" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CEP</label>
+                    <input type="text" value="06149-020" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm">
+                </div>
+            </div>
+
+            <p class="text-xs text-gray-700 my-3 italic">
+                a captar, utilizar e divulgar a imagem, voz e demais dados pessoais do(a) menor, nos termos e condições abaixo:
+            </p>
+
+            <!-- CLÁUSULAS -->
+            <div class="section-title">CLÁUSULAS E CONDIÇÕES</div>
+            <div class="bg-gray-50 p-3 rounded border border-gray-200 max-h-60 overflow-y-auto mb-4">
+                <div class="clause-item"><strong>CLÁUSULA 1 - FINALIDADE:</strong> A presente autorização tem por finalidade o uso da imagem e voz do(a) menor em materiais institucionais, educativos, informativos e de divulgação do Movimento Escoteiro, incluindo campanhas, relatórios, redes sociais, sites institucionais e acervo histórico.</div>
+                <div class="clause-item"><strong>CLÁUSULA 2 - ABRANGÊNCIA:</strong> A autorização é concedida em caráter gratuito, por prazo indeterminado e em todo o território nacional e internacional, abrangendo todos os meios de comunicação existentes ou que venham a ser desenvolvidos.</div>
+                <div class="clause-item"><strong>CLÁUSULA 3 - PROTEÇÃO DA CRIANÇA E DO ADOLESCENTE:</strong> A UEL compromete-se a utilizar a imagem e voz do(a) menor em estrita observância ao princípio da proteção integral, assegurando a preservação de sua dignidade, privacidade, honra e integridade física, psíquica e moral. Fica vedada qualquer utilização que exponha o(a) menor a situação vexatória, constrangedora, inadequada ou que implique exploração de sua imagem. A UEL adotará medidas razoáveis para evitar exposição excessiva, especialmente em ambientes digitais de amplo alcance.</div>
+                <div class="clause-item"><strong>CLÁUSULA 4 - LIMITAÇÃO DE USO:</strong> A imagem e voz do(a) menor não serão utilizadas para fins comerciais diretos ou exploração econômica autônoma, salvo mediante autorização específica do responsável legal e, quando exigido pela legislação, autorização judicial.</div>
+                <div class="clause-item"><strong>CLÁUSULA 5 - TRATAMENTO DE DADOS PESSOAIS (LGPD):</strong> O tratamento dos dados pessoais do(a) menor será realizado com base no consentimento do responsável legal, nos termos da Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades descritas neste instrumento.</div>
+                <div class="clause-item"><strong>CLÁUSULA 6 - REVOGAÇÃO:</strong> A presente autorização poderá ser revogada a qualquer tempo pelo responsável legal, mediante solicitação formal, produzindo efeitos apenas para usos futuros, sem prejuízo das utilizações já realizadas.</div>
+                <div class="clause-item"><strong>CLÁUSULA 7 - CAPTAÇÃO EM EVENTOS:</strong> O responsável declara estar ciente de que a captação de imagens poderá ocorrer em ambientes coletivos, como atividades escoteiras, eventos nacionais, regionais ou locais, não sendo possível o controle individual absoluto de enquadramento.</div>
+                <div class="clause-item"><strong>CLÁUSULA 8 - COMPARTILHAMENTO INSTITUCIONAL:</strong> A UEL poderá compartilhar as imagens com suas unidades regionais, grupos escoteiros e parceiros institucionais, exclusivamente para fins compatíveis com o Movimento Escoteiro, vedado o uso comercial por terceiros.</div>
+                <div class="clause-item"><strong>CLÁUSULA 9 - GRATUIDADE:</strong> A presente autorização é concedida de forma gratuita, não sendo devida qualquer remuneração presente ou futura.</div>
+                <div class="clause-item"><strong>CLÁUSULA 10 - DECLARAÇÃO:</strong> O responsável legal declara que leu, compreendeu e concorda integralmente com os termos deste instrumento.</div>
+            </div>
+
+            <!-- LOCAL E DATA -->
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Local *</label>
+                    <input type="text" id="localData" value="Osasco - SP" required class="w-full mt-1 p-2 border border-gray-300 rounded text-sm">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Data de Assinatura *</label>
+                    <input type="text" id="dataAtual" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm font-bold text-gray-700">
+                </div>
+            </div>
+
+            <!-- ÁREA DE ASSINATURA -->
+            <div class="section-title">ASSINATURA DIGITAL DO RESPONSÁVEL</div>
+            <p class="text-xs text-gray-600 mb-2">Assine no quadro abaixo usando o dedo no celular ou o mouse no computador:</p>
+            
+            <div class="signature-container mb-2">
+                <canvas id="signature-pad"></canvas>
+            </div>
+            
+            <div class="flex justify-between items-center mb-6">
+                <button type="button" id="clear-signature" class="px-3 py-1 bg-gray-200 text-gray-700 rounded text-xs hover:bg-gray-300 font-semibold">
+                    🗑️ Limpar Assinatura
+                </button>
+                <span class="text-xs text-gray-500">Validade jurídica conforme MP 2.200-2/2001 e Lei 14.063/2020</span>
+            </div>
+
+            <div class="mb-4">
+                <label class="inline-flex items-center">
+                    <input type="checkbox" id="checkConcordo" required class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 focus:ring-opacity-50 h-4 w-4">
+                    <span class="ml-2 text-xs font-bold text-gray-800">
+                        Li e concordo com todos os termos e cláusulas desta autorização.
+                    </span>
+                </label>
+            </div>
+
+            <!-- BOTÃO SUBMIT -->
+            <button type="submit" id="btnSubmit" class="w-full py-3 bg-black text-white font-bold rounded-lg shadow-md hover:bg-gray-800 transition duration-200 text-center uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+                <span>📝 ASSINAR E ENVIAR TERMO</span>
+            </button>
+        </form>
+
+        <!-- STATUS MESSAGE -->
+        <div id="statusMessage" class="hidden mt-4 p-4 rounded text-center text-sm font-bold"></div>
+    </div>
+
+    <!-- RODAPÉ -->
+    <footer>
+        <div class="footer-container">
+            <img src="logo_gem.png" alt="Logo Grupo Escoteiro Memorial 350 SP" class="footer-logo" onerror="this.src='https://i.ibb.co/CKWP9CmS/logo-GE-M-2025.jpg'">
+            <div class="footer-info">
+                <p><strong>Grupo Escoteiro Memorial 350 SP</strong></p>
+                <p>Av. Doutor Altair Martins, 520 - Raposo Tavares, Osasco - SP, 06149-020</p>
+            </div>
+            <div class="footer-links">
+                <a href="https://www.instagram.com/gememorial?igsh=Z2dycGZ5bDVqdmw1" target="_blank">Siga-nos no Instagram: @gememorial</a>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // URL DO SEU GOOGLE APPS SCRIPT IMPLANTADO
+        const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsrrtsBFklPDe-rdDRlOfAgd0STZ-nAVyUqF-yPzr4AJOv0g78KFd274F8-Z3YPzRD2Q/exec";
+
+        // Preenche data atual automaticamente
+        const hoje = new Date();
+        const dataFormatada = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
+        document.getElementById('dataAtual').value = dataFormatada;
+
+        // Configuração do Canvas de Assinatura
+        const canvas = document.getElementById('signature-pad');
+        const signaturePad = new SignaturePad(canvas, {
+            backgroundColor: 'rgba(255, 255, 255, 0)',
+            penColor: 'rgb(0, 0, 128)'
+        });
+
+        function resizeCanvas() {
+            const ratio = Math.max(window.devicePixelRatio || 1, 1);
+            canvas.width = canvas.offsetWidth * ratio;
+            canvas.height = canvas.offsetHeight * ratio;
+            canvas.getContext("2d").scale(ratio, ratio);
+            signaturePad.clear();
+        }
+
+        window.addEventListener("resize", resizeCanvas);
+        resizeCanvas();
+
+        document.getElementById('clear-signature').addEventListener('click', () => {
+            signaturePad.clear();
+        });
+
+        // Função principal de envio
+        async function submitForm() {
+            if (signaturePad.isEmpty()) {
+                alert("Por favor, faça sua assinatura digital no quadro antes de enviar.");
+                return;
+            }
+
+            const btnSubmit = document.getElementById('btnSubmit');
+            const statusMessage = document.getElementById('statusMessage');
+
+            btnSubmit.disabled = true;
+            btnSubmit.innerHTML = "⌛ Gerando Termo e Enviando...";
+            statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-blue-100 text-blue-800";
+            statusMessage.innerText = "Processando o formulário... Aguarde um instante.";
+            statusMessage.classList.remove('hidden');
+
+            try {
+                // Captura do formulário em Imagem/PDF
+                const element = document.getElementById('pdf-content');
+                const canvasPdf = await html2canvas(element, { scale: 2 });
+                const imgData = canvasPdf.toDataURL('image/png');
+
+                const nomeMenor = document.getElementById('nomeMenor').value.trim();
+                const fileName = `Termo_UEL_${nomeMenor.replace(/\s+/g, '_')}_${Date.now()}.png`;
+
+                // Preparação dos dados para o Google Apps Script
+                const payload = {
+                    fileName: fileName,
+                    fileData: imgData,
+                    nomeMenor: nomeMenor,
+                    nomeResponsavel: document.getElementById('nomeResponsavel').value.trim()
+                };
+
+                // Envio via POST para o Google Apps Script
+                await fetch(GOOGLE_SCRIPT_URL, {
+                    method: 'POST',
+                    mode: 'no-cors',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-green-100 text-green-800";
+                statusMessage.innerText = "✅ TERMO ASSINADO COM SUCESSO! O documento foi salvo diretamente no Google Drive do Grupo Escoteiro.";
+                btnSubmit.innerHTML = "✅ ASSINADO E ENVIADO";
+
+            } catch (error) {
+                console.error("Erro no envio:", error);
+                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-red-100 text-red-800";
+                statusMessage.innerText = "❌ Ocorreu um erro ao enviar. Por favor, tente novamente.";
+                btnSubmit.disabled = false;
+                btnSubmit.innerHTML = "📝 TENTAR NOVAMENTE";
+            }
+        }
+    </script>
+</body>
+</html>
