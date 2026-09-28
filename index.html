@@ -212,8 +212,7 @@
                 </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase">Data de Nascimento *</label>
-                    <input type="date" id="dataNascimento" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
-                </div>
+                    <input type="text" id="dataNascimento" placeholder="DD/MM/AAAA" maxlength="10" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">                  </div>
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase">RG do(a) Menor</label>
                     <input type="text" id="rgMenor" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
@@ -338,6 +337,19 @@
             backgroundColor: 'rgba(255, 255, 255, 0)',
             penColor: 'rgb(0, 0, 128)'
         });
+
+        // Máscara para forçar o formato DD/MM/AAAA enquanto digita
+const inputDataNascimento = document.getElementById('dataNascimento');
+inputDataNascimento.addEventListener('input', (e) => {
+    let v = e.target.value.replace(/\D/g, ''); // Remove tudo que não é número
+    if (v.length > 8) v = v.slice(0, 8);
+    if (v.length > 4) {
+        v = v.replace(/^(\d{2})(\d{2})(\d{0,4})/, '$1/$2/$3');
+    } else if (v.length > 2) {
+        v = v.replace(/^(\d{2})(\d{0,2})/, '$1/$2');
+    }
+    e.target.value = v;
+});
 
         function resizeCanvas() {
             const ratio = Math.max(window.devicePixelRatio || 1, 1);
