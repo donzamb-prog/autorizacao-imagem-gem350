@@ -3,14 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Autorização de Uso de Imagem, Voz e Dados - GEM 350 SP</title>
+    <title>Autorização de Uso de Imagem, Voz e Dados - UEL</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Signature Pad -->
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
-    <!-- html2canvas -->
+    <!-- jsPDF e html2canvas -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-
     <style>
         :root {
             --primary-color: #111111;
@@ -19,14 +19,13 @@
 
         body {
             background-color: #f3f4f6;
-            color: #111111;
+            color: #1f2937;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             padding: 20px 10px;
-            margin: 0;
         }
 
         .container {
-            max-width: 820px;
+            max-width: 800px;
             margin: 0 auto;
             background: #ffffff;
             padding: 30px;
@@ -41,7 +40,7 @@
             justify-content: space-between;
             border-bottom: 3px solid var(--secondary-color);
             padding-bottom: 15px;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             gap: 15px;
         }
 
@@ -66,7 +65,7 @@
 
         .header-title h2 {
             font-size: 0.95rem;
-            color: #333333;
+            color: #555;
             font-weight: 700;
             letter-spacing: 0.5px;
         }
@@ -74,13 +73,13 @@
         .header-title h1 {
             font-size: 1.35rem;
             color: var(--primary-color);
-            font-weight: 800;
+            font-weight: 700;
             margin: 3px 0;
         }
 
         .header-title p {
             font-size: 0.82rem;
-            color: #222222;
+            color: #444;
             line-height: 1.3;
         }
 
@@ -100,57 +99,23 @@
             color: #ffffff;
             padding: 8px 12px;
             font-weight: bold;
-            font-size: 0.95rem;
-            margin-top: 20px;
-            margin-bottom: 15px;
+            font-size: 0.9rem;
+            margin-top: 18px;
+            margin-bottom: 12px;
             border-left: 5px solid var(--secondary-color);
             border-radius: 2px;
         }
 
         .clause-item {
-            margin-bottom: 10px;
-            font-size: 0.85rem;
+            margin-bottom: 8px;
+            font-size: 0.82rem;
             line-height: 1.45;
-            color: #111111;
+            color: #222222;
             text-align: justify;
-        }
-
-        /* Inputs de Alto Contraste para Leitura e Impressão perfeita */
-        input[type="text"],
-        input[type="date"],
-        input[type="email"],
-        input[type="tel"] {
-            color: #000000 !important;
-            font-weight: 600 !important;
-            font-size: 0.95rem !important;
-            background-color: #ffffff !important;
-            border: 1.5px solid #4b5563 !important;
-            opacity: 1 !important;
-            -webkit-text-fill-color: #000000 !important;
-        }
-
-        input:focus {
-            border-color: #d97706 !important;
-            outline: none !important;
-            box-shadow: 0 0 0 2px rgba(241, 184, 13, 0.4) !important;
-        }
-
-        /* Formatação do texto direto da UEL */
-        .uel-text-block {
-            font-size: 0.92rem;
-            line-height: 1.6;
-            color: #000000;
-            text-align: justify;
-            background-color: #f9fafb;
-            border: 1px solid #e5e7eb;
-            padding: 14px;
-            border-radius: 6px;
-            margin-top: 10px;
-            margin-bottom: 15px;
         }
 
         .signature-container {
-            border: 2px dashed #6b7280;
+            border: 2px dashed #cbd5e1;
             border-radius: 8px;
             background-color: #fafafa;
             position: relative;
@@ -158,9 +123,15 @@
 
         canvas {
             width: 100%;
-            height: 160px;
+            height: 150px;
             touch-action: none;
             cursor: crosshair;
+        }
+
+        /* Input styling for capturing crisp text */
+        input[type="text"], input[type="date"] {
+            font-weight: 600;
+            color: #111111;
         }
 
         footer {
@@ -205,18 +176,6 @@
         .footer-links a:hover {
             text-decoration: underline;
         }
-
-        /* Estilo para simulação perfeita do texto capturado pelo html2canvas */
-        .print-view-value {
-            display: inline-block;
-            font-weight: 700;
-            color: #000000;
-            border-bottom: 1px solid #000000;
-            padding: 2px 4px;
-            width: 100%;
-            min-height: 28px;
-            font-size: 0.95rem;
-        }
     </style>
 </head>
 <body>
@@ -244,58 +203,57 @@
         </h2>
 
         <form id="authForm" onsubmit="event.preventDefault(); submitForm();">
-            
+            <!-- DADOS DO MENOR -->
             <div class="section-title">DADOS DO(A) MENOR</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">Nome do(a) Menor *</label>
-                    <input type="text" id="nomeMenor" required class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do(a) Menor *</label>
+                    <input type="text" id="nomeMenor" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">Data de Nascimento *</label>
-                    <input type="date" id="dataNascimento" required class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Data de Nascimento *</label>
+                    <input type="date" id="dataNascimento" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">RG do(a) Menor</label>
-                    <input type="text" id="rgMenor" class="w-full p-2.5 rounded text-sm" placeholder="Ex: 00.000.000-0">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do(a) Menor</label>
+                    <input type="text" id="rgMenor" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">CPF do(a) Menor</label>
-                    <input type="text" id="cpfMenor" placeholder="Ex: 000.000.000-00" class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do(a) Menor</label>
+                    <input type="text" id="cpfMenor" placeholder="000.000.000-00" class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
             </div>
 
+            <!-- DADOS DO RESPONSÁVEL LEGAL -->
             <div class="section-title">DADOS DO RESPONSÁVEL LEGAL</div>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
                 <div class="md:col-span-2">
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">Nome do Responsável Legal *</label>
-                    <input type="text" id="nomeResponsavel" required class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Nome do Responsável Legal *</label>
+                    <input type="text" id="nomeResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">RG do Responsável *</label>
-                    <input type="text" id="rgResponsavel" required class="w-full p-2.5 rounded text-sm" placeholder="Ex: 00.000.000-0">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">RG do Responsável *</label>
+                    <input type="text" id="rgResponsavel" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">CPF do Responsável *</label>
-                    <input type="text" id="cpfResponsavel" placeholder="Ex: 000.000.000-00" required class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">CPF do Responsável *</label>
+                    <input type="text" id="cpfResponsavel" placeholder="000.000.000-00" required class="w-full mt-1 p-2 border border-gray-300 rounded focus:ring-2 focus:ring-yellow-500 text-sm">
                 </div>
             </div>
 
+            <!-- DADOS DA UNIDADE ESCOTEIRA LOCAL -->
             <div class="section-title">DADOS DA UNIDADE ESCOTEIRA LOCAL (UEL)</div>
-            
-            <p class="text-xs text-gray-800 mb-2 font-medium">
-                Pelo presente instrumento, o(a) RESPONSÁVEL LEGAL acima identificado(a), na qualidade de representante legal do(a) menor:
-            </p>
-
-            <div class="uel-text-block">
+            <div class="bg-gray-50 p-3.5 rounded border border-gray-300 text-xs text-gray-800 leading-relaxed">
+                Pelo presente instrumento, o(a) RESPONSÁVEL LEGAL acima identificado(a), na qualidade de representante legal do(a) menor:<br><br>
                 AUTORIZA o Grupo Escoteiro <strong>MEMORIAL 350 SP.</strong>, pessoa jurídica de direito privado, inscrita no CNPJ nº <strong>46.612.339/0001-40</strong>, com sede na <strong>Rua</strong> Av. Doutor Altair Martins, 520 <strong>Bairro</strong>, Raposo Tavares, <strong>Cidade:</strong> Osasco SP, <strong>CEP.:</strong> 06149-020 a captar, utilizar e divulgar a imagem, voz e demais dados pessoais do(a) menor, nos termos e condições abaixo:
             </div>
 
+            <!-- CLÁUSULAS (TOTALMENTE ESTÁTICAS E SEM SCROLLBAR) -->
             <div class="section-title">CLÁUSULAS E CONDIÇÕES</div>
-            <div class="bg-gray-50 p-4 rounded border border-gray-300 max-h-64 overflow-y-auto mb-4">
+            <div class="bg-gray-50 p-4 rounded border border-gray-300 mb-4">
                 <div class="clause-item"><strong>CLÁUSULA 1 - FINALIDADE:</strong> A presente autorização tem por finalidade o uso da imagem e voz do(a) menor em materiais institucionais, educativos, informativos e de divulgação do Movimento Escoteiro, incluindo campanhas, relatórios, redes sociais, sites institucionais e acervo histórico.</div>
                 <div class="clause-item"><strong>CLÁUSULA 2 - ABRANGÊNCIA:</strong> A autorização é concedida em caráter gratuito, por prazo indeterminado e em todo o território nacional e internacional, abrangendo todos os meios de comunicação existentes ou que venham a ser desenvolvidos.</div>
-                <div class="clause-item"><strong>CLÁUSULA 3 - PROTEÇÃO DA CRIANÇA E DO ADOLESCENTE:</strong> A UEL compromete-se a utilizar a imagem e voz do(a) menor em estrita observância ao princípio da proteção integral, assegurando a preservação de sua dignidade, privacidade, honra e integridade física, psíquica e moral. Fica vedada qualquer utilização que exponha o(a) menor a situação vexatória, constrangedora, inadequada ou que implique exploração de sua imagem. A UEL adotará medidas razoáveis para evitar exposição excessiva, especialmente em ambientes digitais de amplo alcance.</div>
+                <div class="clause-item"><strong>CLÁUSULA 3 - PROTEÇÃO DA CRIANÇA E DO ADOLESCENTE:</strong> O Grupo Escoteiro compromete-se a utilizar a imagem e voz do(a) menor em estrita observância ao princípio da proteção integral, assegurando a preservação de sua dignidade, privacidade, honra e integridade física, psíquica e moral. Fica vedada qualquer utilização que exponha o(a) menor a situação vexatória, constrangedora, inadequada ou que implique exploração de sua imagem. O Grupo Escoteiro adotará medidas razoáveis para evitar exposição excessiva, especialmente em ambientes digitais de amplo alcance.</div>
                 <div class="clause-item"><strong>CLÁUSULA 4 - LIMITAÇÃO DE USO:</strong> A imagem e voz do(a) menor não serão utilizadas para fins comerciais diretos ou exploração econômica autônoma, salvo mediante autorização específica do responsável legal e, quando exigido pela legislação, autorização judicial.</div>
                 <div class="clause-item"><strong>CLÁUSULA 5 - TRATAMENTO DE DADOS PESSOAIS (LGPD):</strong> O tratamento dos dados pessoais do(a) menor será realizado com base no consentimento do responsável legal, nos termos da Lei nº 13.709/2018 (LGPD), exclusivamente para as finalidades descritas neste instrumento.</div>
                 <div class="clause-item"><strong>CLÁUSULA 6 - REVOGAÇÃO:</strong> A presente autorização poderá ser revogada a qualquer tempo pelo responsável legal, mediante solicitação formal, produzindo efeitos apenas para usos futuros, sem prejuízo das utilizações já realizadas.</div>
@@ -306,34 +264,35 @@
             </div>
 
             <!-- LOCAL E DATA -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">Local *</label>
-                    <input type="text" id="localData" value="Osasco - SP" required class="w-full p-2.5 rounded text-sm">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Local *</label>
+                    <input type="text" id="localData" value="Osasco - SP" required class="w-full mt-1 p-2 border border-gray-300 rounded text-sm">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold text-gray-800 uppercase mb-1">Data de Assinatura *</label>
-                    <input type="text" id="dataAtual" readonly class="w-full p-2.5 rounded text-sm font-bold bg-gray-100">
+                    <label class="block text-xs font-bold text-gray-700 uppercase">Data de Assinatura *</label>
+                    <input type="text" id="dataAtual" readonly class="w-full mt-1 p-2 bg-gray-100 border border-gray-300 rounded text-sm font-bold text-gray-800">
                 </div>
             </div>
 
+            <!-- ÁREA DE ASSINATURA -->
             <div class="section-title">ASSINATURA DIGITAL DO RESPONSÁVEL</div>
-            <p class="text-xs text-gray-700 mb-2 font-medium">Assine no quadro abaixo usando o dedo no celular ou o mouse no computador:</p>
+            <p class="text-xs text-gray-600 mb-2">Assine no quadro abaixo usando o dedo no celular ou o mouse no computador:</p>
             
             <div class="signature-container mb-2">
                 <canvas id="signature-pad"></canvas>
             </div>
             
-            <div class="flex justify-between items-center mb-6">
-                <button type="button" id="clear-signature" class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded text-xs hover:bg-gray-300 font-bold transition">
+            <div class="flex justify-between items-center mb-4">
+                <button type="button" id="clear-signature" class="px-3 py-1.5 bg-gray-200 text-gray-800 rounded text-xs hover:bg-gray-300 font-semibold transition">
                     🗑️ Limpar Assinatura
                 </button>
-                <span class="text-[11px] text-gray-600 font-medium">Validade jurídica conforme MP 2.200-2/2001 e Lei 14.063/2020</span>
+                <span class="text-[10px] text-gray-500">Validade jurídica conforme MP 2.200-2/2001 e Lei 14.063/2020</span>
             </div>
 
-            <div class="mb-5 bg-amber-50 p-3 rounded border border-amber-200">
+            <div class="mb-4 bg-yellow-50 p-3 rounded border border-yellow-200">
                 <label class="inline-flex items-center cursor-pointer">
-                    <input type="checkbox" id="checkConcordo" required class="rounded border-gray-400 text-yellow-600 shadow-sm focus:border-yellow-400 focus:ring focus:ring-yellow-200 h-5 w-5">
+                    <input type="checkbox" id="checkConcordo" required class="rounded border-gray-300 text-yellow-600 shadow-sm focus:border-yellow-300 focus:ring focus:ring-yellow-200 h-4 w-4">
                     <span class="ml-2 text-xs font-bold text-gray-900">
                         Li e concordo integralmente com todos os termos e cláusulas desta autorização.
                     </span>
@@ -341,7 +300,7 @@
             </div>
 
             <!-- BOTÃO SUBMIT -->
-            <button type="submit" id="btnSubmit" class="w-full py-3.5 bg-black text-amber-400 font-extrabold rounded-lg shadow-md hover:bg-gray-900 transition duration-200 text-center uppercase tracking-wider text-sm flex items-center justify-center gap-2">
+            <button type="submit" id="btnSubmit" class="w-full py-3.5 bg-black text-white font-bold rounded-lg shadow-md hover:bg-gray-800 transition duration-200 text-center uppercase tracking-wider text-sm flex items-center justify-center gap-2">
                 <span>📝 ASSINAR E ENVIAR TERMO</span>
             </button>
         </form>
@@ -368,7 +327,7 @@
         // URL DO GOOGLE APPS SCRIPT
         const GOOGLE_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzsrrtsBFklPDe-rdDRlOfAgd0STZ-nAVyUqF-yPzr4AJOv0g78KFd274F8-Z3YPzRD2Q/exec";
 
-        // Preenche a data atual
+        // Preenche data atual automaticamente
         const hoje = new Date();
         const dataFormatada = hoje.toLocaleDateString('pt-BR', { day: '2-digit', month: 'long', year: 'numeric' });
         document.getElementById('dataAtual').value = dataFormatada;
@@ -395,40 +354,28 @@
             signaturePad.clear();
         });
 
-        // Converte inputs em elementos de texto puro de alto contraste para garantir nitidez perfeita na imagem do PDF
+        // Converte temporariamente campos de entrada em elementos visíveis para impressão legível
         function prepareInputsForCapture() {
             const inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
-            const replacements = [];
-
             inputs.forEach(input => {
-                const span = document.createElement('span');
-                span.className = 'print-view-value';
-                
-                if (input.type === 'date' && input.value) {
-                    const parts = input.value.split('-');
-                    span.innerText = `${parts[2]}/${parts[1]}/${parts[0]}`;
-                } else {
-                    span.innerText = input.value || ' ';
-                }
-
+                const textSpan = document.createElement('span');
+                textSpan.className = 'temp-print-value font-bold text-black text-sm block border-b border-gray-400 py-1';
+                textSpan.innerText = input.value || '-';
                 input.style.display = 'none';
-                input.parentNode.insertBefore(span, input.nextSibling);
-                replacements.push({ input, span });
+                input.parentNode.insertBefore(textSpan, input.nextSibling);
             });
-
-            return replacements;
         }
 
-        function restoreInputsAfterCapture(replacements) {
-            replacements.forEach(({ input, span }) => {
+        function restoreInputsAfterCapture() {
+            const tempSpans = document.querySelectorAll('.temp-print-value');
+            tempSpans.forEach(span => span.remove());
+            const inputs = document.querySelectorAll('input[type="text"], input[type="date"]');
+            inputs.forEach(input => {
                 input.style.display = '';
-                if (span.parentNode) {
-                    span.parentNode.removeChild(span);
-                }
             });
         }
 
-        // Envio do formulário
+        // Função principal de envio
         async function submitForm() {
             if (signaturePad.isEmpty()) {
                 alert("Por favor, faça sua assinatura digital no quadro antes de enviar.");
@@ -439,33 +386,32 @@
             const statusMessage = document.getElementById('statusMessage');
 
             btnSubmit.disabled = true;
-            btnSubmit.innerHTML = "⌛ Gerando Termo e Enviando...";
-            statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-blue-100 text-blue-900";
-            statusMessage.innerText = "Processando o formulário com alta qualidade... Aguarde um instante.";
+            btnSubmit.innerHTML = "⌛ GERANDO TERMO E ENVIANDO...";
+            statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-blue-100 text-blue-800";
+            statusMessage.innerText = "Processando formulário com alta qualidade... Aguarde um instante.";
             statusMessage.classList.remove('hidden');
 
-            // Substitui temporariamente os campos de input por texto puro legível
-            const replacements = prepareInputsForCapture();
-
             try {
+                // Prepara inputs para autossuficiência de renderização limpa
+                prepareInputsForCapture();
+
+                // Captura do formulário completo em Imagem/PDF
                 const element = document.getElementById('pdf-content');
-                
-                // Renderização em altíssima definição (scale: 2) com html2canvas
                 const canvasPdf = await html2canvas(element, { 
-                    scale: 2,
-                    backgroundColor: '#ffffff',
+                    scale: 2, 
                     useCORS: true,
-                    logging: false,
-                    windowWidth: 1024
+                    scrollX: 0,
+                    scrollY: 0,
+                    windowWidth: document.documentElement.offsetWidth
                 });
 
-                // Restaura os inputs originais na tela
-                restoreInputsAfterCapture(replacements);
+                restoreInputsAfterCapture();
 
                 const imgData = canvasPdf.toDataURL('image/png');
                 const nomeMenor = document.getElementById('nomeMenor').value.trim();
                 const fileName = `Termo_UEL_${nomeMenor.replace(/\s+/g, '_')}_${Date.now()}.png`;
 
+                // Preparação dos dados para o Google Apps Script
                 const payload = {
                     fileName: fileName,
                     fileData: imgData,
@@ -473,7 +419,7 @@
                     nomeResponsavel: document.getElementById('nomeResponsavel').value.trim()
                 };
 
-                // Envia para o Google Apps Script
+                // Envio via POST para o Google Apps Script
                 await fetch(GOOGLE_SCRIPT_URL, {
                     method: 'POST',
                     mode: 'no-cors',
@@ -481,14 +427,14 @@
                     body: JSON.stringify(payload)
                 });
 
-                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-green-100 text-green-900";
-                statusMessage.innerText = "✅ TERMO ASSINADO COM SUCESSO! O documento com legibilidade perfeita foi salvo diretamente no Google Drive do Grupo Escoteiro.";
+                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-green-100 text-green-800";
+                statusMessage.innerText = "✅ TERMO ASSINADO COM SUCESSO! O documento foi salvo diretamente no Google Drive do Grupo Escoteiro.";
                 btnSubmit.innerHTML = "✅ ASSINADO E ENVIADO";
 
             } catch (error) {
+                restoreInputsAfterCapture();
                 console.error("Erro no envio:", error);
-                restoreInputsAfterCapture(replacements);
-                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-red-100 text-red-900";
+                statusMessage.className = "mt-4 p-4 rounded text-center text-sm font-bold bg-red-100 text-red-800";
                 statusMessage.innerText = "❌ Ocorreu um erro ao enviar. Por favor, tente novamente.";
                 btnSubmit.disabled = false;
                 btnSubmit.innerHTML = "📝 TENTAR NOVAMENTE";
